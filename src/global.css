@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+ion-content {
+  --background: var(--ion-color-light);
+}
+
+ion-card {
+  border-radius: 20px !important;
+  box-shadow: 0 8px 20px rgba(44, 30, 22, 0.06) !important;
+  border: 1px solid rgba(210, 180, 140, 0.2);
+  background: #ffffff;
+  margin: 16px;
+}
+
+ion-button {
+  --border-radius: 12px;
+  --box-shadow: 0 4px 12px rgba(111, 78, 55, 0.2);
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: none;
+}
+
+ion-list {
+  background: transparent !important;
+  padding: 0;
+}
+
+ion-item {
+  --background: #ffffff;
+  --border-radius: 16px;
+  margin: 0 16px 12px 16px;
+  --border-width: 0 !important;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+  --padding-start: 12px;
+}
+
+ion-thumbnail {
+  --border-radius: 14px;
+  width: 65px;
+  height: 65px;
+  margin-right: 16px;
+}
+
+ion-label h2 {
+  font-weight: 600 !important;
+  color: var(--ion-color-dark) !important;
+  font-size: 1.1rem;
+  margin-bottom: 4px;
+}
+
+ion-label p {
+  color: #666 !important;
+  font-size: 0.9rem;
+}
+
+ion-title {
+  font-weight: 700;
+  letter-spacing: -0.5px;
+}

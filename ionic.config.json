@@ -1,0 +1,7 @@
+{
+  "name": "cafe-el-estribo",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
