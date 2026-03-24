@@ -1,3 +1,4 @@
+import { useAuth } from '../AuthContext';
 import React from 'react';
 import { 
   IonContent, IonHeader, IonPage, IonTitle, IonToolbar, 
@@ -21,6 +22,7 @@ const productos = {
 };
 
 const Tab1: React.FC = () => {
+  const { user } = useAuth();
   const { agregarAlCarrito } = useCart();
   const [presentToast] = useIonToast();
   const router = useIonRouter();
@@ -63,7 +65,7 @@ const Tab1: React.FC = () => {
           padding: '20px',
         }}>
           <IonText color="light">
-            <h1 style={{ fontWeight: 700, margin: 0, fontSize: '1.6rem' }}>¡Hola, Jaime!</h1>
+            <h1 style={{ fontWeight: 700, margin: 0, fontSize: '1.6rem' }}>¡Hola, {user?.nombre}!</h1>
             <p style={{ margin: '5px 0 0 0', opacity: 0.9 }}>¿Empezamos con un Latte?</p>
           </IonText>
         </div>

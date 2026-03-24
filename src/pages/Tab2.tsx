@@ -2,23 +2,51 @@ import {
   IonContent, IonHeader, IonPage, IonTitle, IonToolbar, 
   IonList, IonItem, IonLabel, IonListHeader, 
   IonFooter, IonButton, IonIcon, IonThumbnail, IonText,
-  useIonAlert, useIonRouter
+  useIonAlert, useIonRouter, useIonToast // Añadimos el Toast para avisar del reembolso
 } from '@ionic/react';
 import { cardOutline, timeOutline, addCircleOutline, removeCircleOutline, trashOutline, cafeOutline } from 'ionicons/icons';
 import { useCart } from '../CartContext';
+import { useAuth } from '../AuthContext'; 
 import './Tab2.css';
 
 const Tab2: React.FC = () => {
   const { carrito, total, agregarAlCarrito, restarDelCarrito, vaciarCarrito } = useCart();
+  const { sumarPuntos } = useAuth(); 
   const [presentAlert] = useIonAlert();
+  const [presentToast] = useIonToast(); // Herramienta para notificaciones pequeñas
   const router = useIonRouter();
 
   const procesarPago = () => {
+    const puntosGanados = Math.floor(total); 
+    sumarPuntos(puntosGanados); 
+
     presentAlert({
       header: '¡Pedido Confirmado!',
-      message: 'Tu café estará listo para recoger en 15 minutos en la sucursal Universidad.',
-      buttons: [{ text: '¡Genial!', handler: () => vaciarCarrito() }]
+      message: `Tu pedido estará listo en 15 minutos. ¡Acabas de ganar ${puntosGanados} puntos para tu tarjeta de lealtad! ☕`,
+      buttons: [{ 
+        text: '¡Genial!', 
+        handler: () => {
+          vaciarCarrito();
+          router.push('/tab3');
+        } 
+      }]
     });
+  };
+
+  // Función especial para manejar cuando quitan cosas del carrito
+  const handleQuitarProducto = (item: any) => {
+    // Si el producto es el premio (id: 999), le devolvemos sus puntos
+    if (item.id === 999) {
+      sumarPuntos(500);
+      presentToast({ 
+        message: 'Premio cancelado. Se te devolvieron 500 puntos 🪙', 
+        duration: 2500, 
+        color: 'primary',
+        position: 'top'
+      });
+    }
+    // Quitamos el producto del carrito
+    restarDelCarrito(item.id);
   };
 
   return (
@@ -54,17 +82,29 @@ const Tab2: React.FC = () => {
                   <IonText color="success"><h3 style={{ fontWeight: 700, margin: '4px 0' }}>${(item.precio * item.cantidad).toFixed(2)}</h3></IonText>
                   
                   <div style={{ display: 'flex', alignItems: 'center', gap: '15px', marginTop: '8px' }}>
+                    
+                    {/* Botón de Restar/Eliminar */}
                     <IonIcon 
                       icon={item.cantidad === 1 ? trashOutline : removeCircleOutline} 
                       style={{ fontSize: '1.6rem', color: item.cantidad === 1 ? '#ff4961' : 'var(--ion-color-primary)' }} 
-                      onClick={() => restarDelCarrito(item.id)}
+                      onClick={() => handleQuitarProducto(item)} 
                     />
-                    <span style={{ fontWeight: 'bold', fontSize: '1.2rem', minWidth: '20px', textAlign: 'center' }}>{item.cantidad}</span>
-                    <IonIcon 
-                      icon={addCircleOutline} 
-                      style={{ fontSize: '1.6rem', color: 'var(--ion-color-primary)' }} 
-                      onClick={() => agregarAlCarrito(item)}
-                    />
+                    
+                    <span style={{ fontWeight: 'bold', fontSize: '1.2rem', minWidth: '20px', textAlign: 'center' }}>
+                      {item.cantidad}
+                    </span>
+                    
+                    {/* Botón de Sumar (Solo aparece si NO es un premio) */}
+                    {item.id !== 999 ? (
+                      <IonIcon 
+                        icon={addCircleOutline} 
+                        style={{ fontSize: '1.6rem', color: 'var(--ion-color-primary)' }} 
+                        onClick={() => agregarAlCarrito(item)}
+                      />
+                    ) : (
+                      <div style={{ width: '1.6rem' }}></div> /* Espacio vacío para que no se desalinee */
+                    )}
+
                   </div>
                 </IonLabel>
               </IonItem>
@@ -73,7 +113,6 @@ const Tab2: React.FC = () => {
         )}
       </IonContent>
 
-      {}
       <IonFooter className="ion-no-border">
         <div style={{ 
           background: '#fff', 

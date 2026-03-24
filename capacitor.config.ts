@@ -1,8 +1,8 @@
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'cafe-el-estribo',
+  appId: 'com.cafeelestribo.app',
+  appName: 'Café El Estribo',
   webDir: 'dist'
 };
 
